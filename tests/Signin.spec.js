@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { Login } = require('../Pages/Login');
+
 test.setTimeout(60000);
 
 test('Signin', async ({ page }) => {
@@ -9,11 +10,15 @@ test('Signin', async ({ page }) => {
     await login.goToLoginPage();
 
     await login.login(
-        'sc.live-b.superdiary@leaptest.io',
-        'Live2406'
+        process.env.LEAP_USERNAME,
+        process.env.LEAP_PASSWORD
     );
 
-    //await expect(page.getByRole('img').first()).toBeVisible();
-    await expect(page).toHaveURL(/matters/);
-    timeout:15000
-});
+   await expect(page).toHaveURL(/\/matters/, {timeout: 30000});
+   await expect(page.getByRole('button', { name: 'New Matter' })).toBeVisible({ timeout: 30000 });
+
+    //await expect(page.getByText(/Matter List - Showing:/)).toBeVisible({
+        timeout: 30000
+    });
+    
+//});
